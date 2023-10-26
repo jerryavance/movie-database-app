@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>My Movie Database</title>
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <h1>Movie Database</h1>
+            <input type="text" id="search" placeholder="Search...">
+        </div>
+    </nav>
+    <div class="container">
+        <div class="movies-container">
+            <!-- Movie cards will be displayed here -->
+        </div>
+        <button id="add-movie">Add New Movie</button>
+    </div>
+
+    <!-- Add this modal at the end of your body section -->
+    <div id="movieModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeModal">&times;</span>
+            <h2 id="modalTitle">Add Movie</h2>
+            <form id="movieForm" method="POST" action="/movies">
+                <div class="form-group">
+                    <label for="title">Title:</label>
+                    <input type="text" id="title" name="title" required>
+                </div>
+                <div class="form-group">
+                    <label for="genre">Genre:</label>
+                    <input type="text" id="genre" name="genre" required>
+                </div>
+                <div class="form-group">
+                    <label for="plot">Plot:</label>
+                    <textarea id="plot" name="plot" rows="4" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="releaseDate">Release Date:</label>
+                    <input type="date" id="releaseDate" name="releaseDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="personalRating">Personal Rating:</label>
+                    <input type="number" id="personalRating" name="personalRating" step="0.1" required>
+                </div>
+                <div class="form-group">
+                    <label for="notes">Notes:</label>
+                    <textarea id="notes" name="notes" rows="4"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="thumbnailUrl">Thumbnail URL:</label>
+                    <input type="url" id="thumbnailUrl" name="thumbnailUrl">
+                </div>
+                <div class="form-actions">
+                    <button type="button" id="cancelEdit" style="display: none;">Cancel</button>
+                    <button type="button" id="submitForm">Add Movie</button>
+                    <button type="button" id="saveChangesButton">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+  
+</body>
+<script src="client.js"></script>
+</html>
+
