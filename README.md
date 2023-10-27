@@ -34,13 +34,13 @@ In the folder "db" you can find the SQL neccesary to create the database tables.
 
 Open the server.js file and update the following configuration options:
 
-// MySQL database connection
-const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'your_username', // MySQL username
-  password: 'your_password', // MySQL password
-  database: 'movie_database',
-});
+    // MySQL database connection
+    const db = mysql.createConnection({
+    host: 'localhost',
+    user: 'your_username', // MySQL username
+    password: 'your_password', // MySQL password
+    database: 'movie_database',
+    });
 
 If necessary, modify other configuration options in the file according to your project requirements.
 
