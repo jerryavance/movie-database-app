@@ -23,27 +23,34 @@ function getMovies() {
       .catch((error) => console.error('Error fetching movies:', error));
 }
   
-  // Helper function to create a movie card
-  function createMovieCard(movie) {
-    const movieCard = document.createElement('div');
-    movieCard.className = 'movie-card';
-    movieCard.innerHTML = `
-      <img src="${movie.thumbnail_url}" alt="${movie.title} Thumbnail">
-      <h2>${movie.title}</h2>
-      <p>Genre: ${movie.genre}</p>
-      <p>Plot: ${movie.plot}</p>
-      <p>Release Date: ${movie.release_date}</p>
-      <p>Peronal Rating: ${movie.personal_rating}</p>
-      <div class="star-rating">
-        ${getStarRatingHTML(movie.personal_rating)}
-      </div>
-      <p>Notes: ${movie.notes}</p>
-      <button onclick="editMovie(${movie.id})">Edit</button>
-      <button onclick="deleteMovie(${movie.id})">Delete</button>
-    `;
-  
-    return movieCard;
-  }
+ // Helper function to create a movie card
+function createMovieCard(movie) {
+  const movieCard = document.createElement('div');
+  movieCard.className = 'movie-card';
+
+  // Format the release date
+  const releaseDate = new Date(movie.release_date);
+  const options = { year: 'numeric', month: 'short', day: 'numeric' };
+  const formattedDate = releaseDate.toLocaleDateString(undefined, options);
+
+  movieCard.innerHTML = `
+    <img src="${movie.thumbnail_url}" alt="${movie.title} Thumbnail">
+    <h2>${movie.title}</h2>
+    <p>Genre: ${movie.genre}</p>
+    <p>Plot: ${movie.plot}</p>
+    <p>Release Date: ${formattedDate}</p>
+    <p>Personal Rating: ${movie.personal_rating}</p>
+    <div class="star-rating">
+      ${getStarRatingHTML(movie.personal_rating)}
+    </div>
+    <p>Notes: ${movie.notes}</p>
+    <button onclick="editMovie(${movie.id})">Edit</button>
+    <button onclick="deleteMovie(${movie.id})">Delete</button>
+  `;
+
+  return movieCard;
+}
+
 
 
 //POST Movies (Create)
