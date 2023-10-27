@@ -44,6 +44,17 @@
                 </div>
                 <div class="form-group">
                     <label for="personalRating">Personal Rating:</label>
+                    <div id="starRating" class="star-rating">
+                        <span class="star" data-rating="1"></span>
+                        <span class="star" data-rating="2"></span>
+                        <span class="star" data-rating="3"></span>
+                        <span class="star" data-rating="4"></span>
+                        <span class="star" data-rating="5"></span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="personalRating">Personal Rating:</label>
                     <input type="number" id="personalRating" name="personalRating" step="0.1" required>
                 </div>
                 <div class="form-group">
@@ -65,5 +76,7 @@
   
 </body>
 <script src="client.js"></script>
+<!-- Include SortableJS from a CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
 </html>
 

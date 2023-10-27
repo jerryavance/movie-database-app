@@ -16,6 +16,8 @@ function getMovies() {
             const movieCard = createMovieCard(movie);
             moviesContainer.appendChild(movieCard);
           });
+
+          initializeSortableList(); // Initialize the sortable list
         }
       })
       .catch((error) => console.error('Error fetching movies:', error));
@@ -32,6 +34,9 @@ function getMovies() {
       <p>Plot: ${movie.plot}</p>
       <p>Release Date: ${movie.release_date}</p>
       <p>Personal Rating: ${movie.personal_rating}</p>
+      <div class="star-rating">
+        ${getStarRatingHTML(movie.personal_rating)}
+      </div>
       <p>Notes: ${movie.notes}</p>
       <button onclick="editMovie(${movie.id})">Edit</button>
       <button onclick="deleteMovie(${movie.id})">Delete</button>
@@ -239,7 +244,125 @@ function openModal(isEdit, movieData) {
   
 
 
+// /////////////////////////////////////////////////////////////////////////////////////
+// Add an event listener for the search input field
+const searchInput = document.getElementById('search');
+searchInput.addEventListener('input', performSearch);
 
+// Function to perform the search
+function performSearch() {
+  const query = searchInput.value.trim(); // Trim any leading/trailing whitespace
+
+  // Make a GET request to search for movies based on the query
+  fetch(`/search?query=${query}`) // Replace with your backend search route
+    .then((response) => response.json())
+    .then((data) => {
+      displaySearchResults(data); // Display the search results
+    })
+    .catch((error) => console.error('Error searching movies:', error));
+}
+
+// Function to display search results
+function displaySearchResults(searchResults) {
+  const moviesContainer = document.querySelector('.movies-container');
+  moviesContainer.innerHTML = ''; // Clear the container
+
+  if (searchResults.length === 0) {
+    // No movies match the search query, display a message
+    moviesContainer.innerHTML = '<p>No matching movies found.</p>';
+  } else {
+    // Display the movie cards for matching results
+    searchResults.forEach((movie) => {
+      const movieCard = createMovieCard(movie);
+      moviesContainer.appendChild(movieCard);
+    });
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////
+// Function to initialize the sortable list
+function initializeSortableList() {
+  const moviesContainer = document.querySelector('.movies-container');
+
+  new Sortable(moviesContainer, {
+    animation: 150, // Set the animation duration
+    handle: '.movie-card', // Set the handle for dragging (optional)
+    onEnd: () => {
+      // This function is called when sorting ends
+      // You can use this callback to update the movie order in the database
+      updateMovieOrder();
+    },
+  });
+}
+
+// Function to update the movie order in the database
+function updateMovieOrder() {
+  const movieCards = document.querySelectorAll('.movie-card');
+  const newOrder = Array.from(movieCards).map((movieCard) => movieCard.dataset.movieId);
+
+  // Send the new order to the server
+  fetch('/movies/order', {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ order: newOrder }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data.message); // Movie order updated
+    })
+    .catch((error) => console.error('Error updating movie order:', error));
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Function to initialize star rating
+function initializeStarRating() {
+  const starRating = document.querySelector('.star-rating');
+  const stars = starRating.querySelectorAll('.star');
+  const personalRatingInput = document.getElementById('personalRating');
+
+  stars.forEach((star) => {
+    star.addEventListener('click', () => {
+      const rating = parseInt(star.getAttribute('data-rating'), 10);
+      personalRatingInput.value = rating;
+      updateStarRating(rating);
+    });
+  });
+}
+
+// Function to update the star rating display
+function updateStarRating(rating) {
+  const stars = document.querySelectorAll('.star');
+  stars.forEach((star) => {
+    const starRating = parseInt(star.getAttribute('data-rating'), 10);
+    if (starRating <= rating) {
+      star.classList.add('selected');
+    } else {
+      star.classList.remove('selected');
+    }
+  });
+}
+
+// Call the initializeStarRating function when the page loads
+initializeStarRating();
+
+// Function to generate HTML for star rating display
+function getStarRatingHTML(rating) {
+  const maxRating = 5;
+  let starHTML = '';
+
+  for (let i = 1; i <= maxRating; i++) {
+    if (i <= rating) {
+      starHTML += '<span class="star selected">&#9733;</span>'; // You can replace &#9733; with your star icon
+    } else {
+      starHTML += '<span class="star">&#9733;</span>'; // You can replace &#9733; with your star icon
+    }
+  }
+
+  return starHTML;
+}
 
 
 // Call getMovies when the page loads
