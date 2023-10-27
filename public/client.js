@@ -33,7 +33,7 @@ function getMovies() {
       <p>Genre: ${movie.genre}</p>
       <p>Plot: ${movie.plot}</p>
       <p>Release Date: ${movie.release_date}</p>
-      <p>Personal Rating: ${movie.personal_rating}</p>
+      <p>Peronal Rating: ${movie.personal_rating}</p>
       <div class="star-rating">
         ${getStarRatingHTML(movie.personal_rating)}
       </div>
@@ -317,53 +317,23 @@ function updateMovieOrder() {
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Function to initialize star rating
-function initializeStarRating() {
-  const starRating = document.querySelector('.star-rating');
-  const stars = starRating.querySelectorAll('.star');
-  const personalRatingInput = document.getElementById('personalRating');
-
-  stars.forEach((star) => {
-    star.addEventListener('click', () => {
-      const rating = parseInt(star.getAttribute('data-rating'), 10);
-      personalRatingInput.value = rating;
-      updateStarRating(rating);
-    });
-  });
-}
-
-// Function to update the star rating display
-function updateStarRating(rating) {
-  const stars = document.querySelectorAll('.star');
-  stars.forEach((star) => {
-    const starRating = parseInt(star.getAttribute('data-rating'), 10);
-    if (starRating <= rating) {
-      star.classList.add('selected');
-    } else {
-      star.classList.remove('selected');
-    }
-  });
-}
-
-// Call the initializeStarRating function when the page loads
-initializeStarRating();
-
 // Function to generate HTML for star rating display
 function getStarRatingHTML(rating) {
+  //console.log('Rating:', rating); // Log the rating for debugging
   const maxRating = 5;
   let starHTML = '';
 
   for (let i = 1; i <= maxRating; i++) {
     if (i <= rating) {
-      starHTML += '<span class="star selected">&#9733;</span>'; // You can replace &#9733; with your star icon
+      starHTML += '<span class="star selected">&#9733;</span>'; // Filled star
     } else {
-      starHTML += '<span class="star">&#9733;</span>'; // You can replace &#9733; with your star icon
+      starHTML += '<span class="star">&#9733;</span>'; // Empty star
     }
   }
 
   return starHTML;
 }
 
-
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Call getMovies when the page loads
 window.addEventListener('load', getMovies);
